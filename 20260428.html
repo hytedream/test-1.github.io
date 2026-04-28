@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A股板块作战图谱 · 2026年4月28日</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --panel: #0f1318;
+    --border: #1e2530;
+    --accent-gold: #c9a84c;
+    --accent-red: #e05252;
+    --accent-green: #4caf76;
+    --accent-blue: #4a90c4;
+    --accent-orange: #d4824a;
+    --accent-purple: #8b6fd4;
+    --text-primary: #e8e4dc;
+    --text-secondary: #8a8a8a;
+    --text-dim: #555;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 39px, rgba(255,255,255,0.015) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.015) 39px, rgba(255,255,255,0.015) 40px);
+  }
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.04) 50%, transparent 100%);
+    animation: scanline 8s linear infinite;
+  }
+  @keyframes scanline {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .header-title { font-family: 'Noto Serif SC', serif; }
+  .header-title h1 {
+    font-size: 2rem; font-weight: 900; color: var(--accent-gold);
+    letter-spacing: 0.08em; text-shadow: 0 0 40px rgba(201,168,76,0.4);
+  }
+  .header-title p {
+    font-size: 0.7rem; color: var(--text-secondary);
+    letter-spacing: 0.2em; margin-top: 0.3rem; text-transform: uppercase;
+  }
+  .header-meta { text-align: right; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em; line-height: 1.8; }
+  .header-meta .date { color: var(--accent-gold); font-size: 0.75rem; font-weight: 700; }
+
+  .action-banner {
+    background: linear-gradient(90deg, rgba(76,175,118,0.10) 0%, rgba(201,168,76,0.06) 50%, rgba(76,175,118,0.10) 100%);
+    border-bottom: 1px solid rgba(76,175,118,0.35);
+    padding: 1rem 3rem;
+    position: relative;
+  }
+  .action-banner-title {
+    font-size: 0.6rem; letter-spacing: 0.3em; color: var(--accent-green);
+    margin-bottom: 0.6rem; text-transform: uppercase;
+  }
+  .action-items { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+  .action-item {
+    display: flex; align-items: center; gap: 0.5rem;
+    font-size: 0.62rem; font-family: 'Noto Serif SC', serif;
+    color: var(--text-secondary); background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(76,175,118,0.25); padding: 0.3rem 0.7rem;
+  }
+  .action-item .pct { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 700; }
+  .action-item .pct.high { color: var(--accent-green); }
+  .action-item .pct.mid { color: var(--accent-gold); }
+  .action-item .pct.low { color: var(--accent-blue); }
+
+  .summary-strip {
+    background: rgba(201,168,76,0.05);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0.7rem 3rem;
+    display: flex; gap: 3rem; overflow-x: auto; white-space: nowrap;
+  }
+  .strip-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--text-secondary); }
+  .strip-dot { width: 6px; height: 6px; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+  .strip-dot.danger { background: var(--accent-red); box-shadow: 0 0 6px var(--accent-red); }
+  .strip-dot.watch { background: var(--accent-gold); box-shadow: 0 0 6px var(--accent-gold); }
+  .strip-dot.go { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+  .strip-dot.neutral { background: var(--accent-blue); box-shadow: 0 0 6px var(--accent-blue); }
+
+  .section-divider {
+    padding: 1rem 3rem 0;
+    font-size: 0.6rem; letter-spacing: 0.3em; color: var(--text-dim); text-transform: uppercase;
+    display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;
+  }
+  .section-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--border), transparent); }
+
+  .main {
+    padding: 1.5rem 3rem 2rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    padding: 1.5rem; position: relative; overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s; cursor: default;
+    animation: fadeUp 0.5s ease both;
+  }
+  .card:hover { border-color: rgba(201,168,76,0.3); box-shadow: 0 0 30px rgba(201,168,76,0.05); }
+  .card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .card.danger::before { background: var(--accent-red); box-shadow: 4px 0 20px var(--accent-red); }
+  .card.caution::before { background: var(--accent-gold); box-shadow: 4px 0 20px var(--accent-gold); }
+  .card.watch::before { background: var(--accent-orange); box-shadow: 4px 0 20px var(--accent-orange); }
+  .card.go::before { background: var(--accent-green); box-shadow: 4px 0 20px var(--accent-green); }
+  .card.neutral::before { background: var(--accent-blue); box-shadow: 4px 0 20px var(--accent-blue); }
+  .card.new-sector::before { background: var(--accent-purple); box-shadow: 4px 0 20px var(--accent-purple); }
+  .card.wide { grid-column: span 2; }
+  .card.full { grid-column: span 3; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .card:nth-child(1){animation-delay:0.05s}.card:nth-child(2){animation-delay:0.1s}.card:nth-child(3){animation-delay:0.15s}
+  .card:nth-child(4){animation-delay:0.2s}.card:nth-child(5){animation-delay:0.25s}.card:nth-child(6){animation-delay:0.3s}
+  .card:nth-child(7){animation-delay:0.35s}.card:nth-child(8){animation-delay:0.4s}.card:nth-child(9){animation-delay:0.45s}
+
+  .new-badge {
+    font-size: 0.48rem; padding: 0.1rem 0.3rem;
+    background: rgba(139,111,212,0.2); border: 1px solid var(--accent-purple);
+    color: var(--accent-purple); letter-spacing: 0.15em; margin-left: 0.5rem; vertical-align: middle;
+  }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 1rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border);
+  }
+  .card-sector { font-family: 'Noto Serif SC', serif; font-size: 1.05rem; font-weight: 700; color: var(--text-primary); }
+  .card-icon { font-size: 1.4rem; opacity: 0.8; }
+  .status-badge {
+    font-size: 0.58rem; letter-spacing: 0.15em; padding: 0.2rem 0.5rem;
+    border: 1px solid; margin-top: 0.3rem; display: inline-block; text-transform: uppercase;
+  }
+  .badge-danger { color: var(--accent-red); border-color: var(--accent-red); background: rgba(224,82,82,0.08); }
+  .badge-caution { color: var(--accent-gold); border-color: var(--accent-gold); background: rgba(201,168,76,0.08); }
+  .badge-watch { color: var(--accent-orange); border-color: var(--accent-orange); background: rgba(212,130,74,0.08); }
+  .badge-go { color: var(--accent-green); border-color: var(--accent-green); background: rgba(76,175,118,0.08); }
+  .badge-neutral { color: var(--accent-blue); border-color: var(--accent-blue); background: rgba(74,144,196,0.08); }
+  .badge-new { color: var(--accent-purple); border-color: var(--accent-purple); background: rgba(139,111,212,0.08); }
+  .section-label {
+    font-size: 0.58rem; letter-spacing: 0.2em; color: var(--text-dim);
+    text-transform: uppercase; margin-bottom: 0.4rem; margin-top: 0.8rem;
+  }
+  .card-text { font-size: 0.7rem; color: var(--text-secondary); line-height: 1.8; font-family: 'Noto Serif SC', serif; }
+  .condition-block {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    padding: 0.7rem; margin-top: 0.5rem;
+  }
+  .condition-block .label { font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .condition-block.buy .label { color: var(--accent-green); }
+  .condition-block.sell .label { color: var(--accent-red); }
+  .condition-block.time .label { color: var(--accent-blue); }
+  .condition-block ul { list-style: none; padding: 0; }
+  .condition-block ul li {
+    font-family: 'Noto Serif SC', serif; font-size: 0.67rem; color: var(--text-secondary);
+    padding: 0.2rem 0; padding-left: 0.8rem; position: relative; line-height: 1.6;
+  }
+  .condition-block.buy ul li::before { content: '▲ '; color: var(--accent-green); font-size: 0.5rem; position: absolute; left: 0; top: 0.35rem; }
+  .condition-block.sell ul li::before { content: '▼ '; color: var(--accent-red); font-size: 0.5rem; position: absolute; left: 0; top: 0.35rem; }
+  .condition-block.time ul li::before { content: '◆ '; color: var(--accent-blue); font-size: 0.5rem; position: absolute; left: 0; top: 0.35rem; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 0.8rem; }
+
+  .risk-meter { margin-top: 0.8rem; display: flex; align-items: center; gap: 0.5rem; }
+  .risk-label { font-size: 0.58rem; color: var(--text-dim); letter-spacing: 0.1em; min-width: 40px; }
+  .risk-bar { flex: 1; height: 4px; background: var(--border); position: relative; overflow: hidden; }
+  .risk-fill { height: 100%; transition: width 1s ease; }
+  .risk-low .risk-fill { background: var(--accent-green); }
+  .risk-mid .risk-fill { background: var(--accent-gold); }
+  .risk-high .risk-fill { background: var(--accent-red); }
+  .risk-val { font-size: 0.65rem; font-weight: 700; min-width: 30px; text-align: right; }
+  .risk-low .risk-val { color: var(--accent-green); }
+  .risk-mid .risk-val { color: var(--accent-gold); }
+  .risk-high .risk-val { color: var(--accent-red); }
+
+  .force-row { display: flex; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap; }
+  .force-tag { font-size: 0.55rem; padding: 0.15rem 0.4rem; border: 1px solid var(--border); color: var(--text-dim); letter-spacing: 0.1em; }
+  .force-tag.bull { border-color: rgba(76,175,118,0.4); color: var(--accent-green); background: rgba(76,175,118,0.05); }
+  .force-tag.bear { border-color: rgba(224,82,82,0.4); color: var(--accent-red); background: rgba(224,82,82,0.05); }
+  .force-tag.neutral { border-color: rgba(74,144,196,0.4); color: var(--accent-blue); background: rgba(74,144,196,0.05); }
+
+  .overall {
+    margin: 0 3rem 2rem; background: var(--panel);
+    border: 1px solid rgba(201,168,76,0.3); padding: 2rem; position: relative; overflow: hidden;
+  }
+  .overall::after {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(ellipse at center, rgba(201,168,76,0.04) 0%, transparent 60%); pointer-events: none;
+  }
+  .overall-title {
+    font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 900;
+    color: var(--accent-gold); letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .overall-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent); }
+  .overall-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .overall-col h3 {
+    font-family: 'Noto Serif SC', serif; font-size: 0.8rem; color: var(--text-secondary);
+    letter-spacing: 0.15em; margin-bottom: 0.8rem; padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border); text-transform: uppercase;
+  }
+  .overall-col p { font-family: 'Noto Serif SC', serif; font-size: 0.72rem; color: var(--text-secondary); line-height: 2; }
+  .highlight { color: var(--accent-gold); font-weight: 700; }
+  .highlight-red { color: var(--accent-red); }
+  .highlight-green { color: var(--accent-green); }
+  .highlight-blue { color: var(--accent-blue); }
+  .highlight-purple { color: var(--accent-purple); }
+
+  .timeline { margin: 0 3rem 2rem; background: var(--panel); border: 1px solid var(--border); padding: 1.5rem 2rem; }
+  .timeline-title { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 1.2rem; }
+  .timeline-row { display: flex; align-items: stretch; gap: 0; margin-bottom: 0.5rem; font-size: 0.62rem; }
+  .tl-period { min-width: 120px; color: var(--accent-gold); letter-spacing: 0.1em; padding-right: 1rem; padding-top: 0.1rem; border-right: 1px solid var(--border); flex-shrink: 0; }
+  .tl-content { padding-left: 1rem; color: var(--text-secondary); font-family: 'Noto Serif SC', serif; font-size: 0.68rem; line-height: 1.7; }
+  .tl-content .sector-tag {
+    display: inline-block; padding: 0 0.3rem; margin-right: 0.3rem;
+    font-size: 0.6rem; border: 1px solid; font-family: 'JetBrains Mono', monospace; vertical-align: middle; line-height: 1.4;
+  }
+
+  footer {
+    border-top: 1px solid var(--border); padding: 1rem 3rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p { font-size: 0.58rem; color: var(--text-dim); letter-spacing: 0.1em; line-height: 1.8; }
+  .disclaimer { font-size: 0.58rem; color: var(--text-dim); max-width: 400px; line-height: 1.6; text-align: right; }
+
+  @media (max-width: 1100px) {
+    .main { grid-template-columns: 1fr 1fr; }
+    .card.wide,.card.full { grid-column: span 2; }
+    .overall-grid { grid-template-columns: 1fr 1fr; }
+    header,.main { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .summary-strip,.action-banner,.section-divider { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .overall,.timeline { margin-left: 1.5rem; margin-right: 1.5rem; }
+    footer { padding: 1rem 1.5rem; }
+  }
+  @media (max-width: 700px) {
+    .main { grid-template-columns: 1fr; }
+    .card.wide,.card.full { grid-column: span 1; }
+    .overall-grid { grid-template-columns: 1fr; }
+    header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-title">
+    <h1>A股板块作战图谱</h1>
+    <p>China A-Share Sector Intelligence · Cross-Border Signal Analysis · v2 — 16 Sectors</p>
+  </div>
+  <div class="header-meta">
+    <div class="date">2026年4月28日</div>
+    <div>参考信息源：香港·海外机构·国际宏观</div>
+    <div>策略视角：主力 / 游资 / 散户三方博弈</div>
+    <div style="color:var(--accent-green);margin-top:0.3rem;">今日新增：AI · 消费电子 · 军工 · 人形机器人 · 银行红利 · 信创</div>
+  </div>
+</header>
+
+<!-- 今日操作建议横幅 -->
+<div class="action-banner">
+  <div class="action-banner-title">// 今日买入操作建议 · 空仓起步 · 北京时间15:00前执行</div>
+  <div class="action-items">
+    <div class="action-item">
+      <span>🥇 黄金ETF (518880)</span><span class="pct high">20%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">防御底仓·当前金价$4,689</span>
+    </div>
+    <div class="action-item">
+      <span>🤖 AI算力ETF (588088)</span><span class="pct high">15%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">分2批·今日8%+FOMC后7%</span>
+    </div>
+    <div class="action-item">
+      <span>🛡️ 军工ETF (512660)</span><span class="pct mid">12%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">国防预算+7%，台海溢价</span>
+    </div>
+    <div class="action-item">
+      <span>🌾 氮肥/农业ETF</span><span class="pct mid">10%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">供应危机买点已至</span>
+    </div>
+    <div class="action-item">
+      <span>🔋 锂矿ETF (159604)</span><span class="pct low">8%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">趋势跟踪·小仓位</span>
+    </div>
+    <div class="action-item">
+      <span>🏥 医疗器械ETF (512170)</span><span class="pct low">5%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">历史估值底部</span>
+    </div>
+    <div class="action-item" style="border-color:rgba(201,168,76,0.3);">
+      <span style="color:var(--accent-gold)">💰 现金留存 30%</span>
+      <span style="font-size:0.56rem;color:var(--text-dim)">等待FOMC结果(明日凌晨)再加仓</span>
+    </div>
+  </div>
+</div>
+
+<div class="summary-strip">
+  <div class="strip-item"><span class="strip-dot danger"></span>CPO光模块 · 估值偏高 · 观望</div>
+  <div class="strip-item"><span class="strip-dot watch"></span>黄金 · $4,689 · FOMC前建底仓</div>
+  <div class="strip-item"><span class="strip-dot go"></span>氮肥/粮食 · 供应危机支撑 · 可买</div>
+  <div class="strip-item"><span class="strip-dot neutral"></span>水电 · 防御 · 等待5月夏汛</div>
+  <div class="strip-item"><span class="strip-dot watch"></span>恒生科技 · AI情绪回暖 · 小仓</div>
+  <div class="strip-item"><span class="strip-dot danger"></span>商业航天 · 高位风险 · 回避</div>
+  <div class="strip-item"><span class="strip-dot danger"></span>白酒 · 库存高企 · 回避</div>
+  <div class="strip-item"><span class="strip-dot watch"></span>半导体 · V4利好SMIC · 炒作溢价高</div>
+  <div class="strip-item"><span class="strip-dot go"></span>锂矿 · 价格反弹 · 小仓跟踪</div>
+  <div class="strip-item"><span class="strip-dot neutral"></span>医疗 · AI医疗亮点 · 底部小仓</div>
+  <div class="strip-item"><span class="strip-dot watch"></span>新能源 · 补贴退坡 · 等欧盟限价</div>
+  <div class="strip-item"><span class="strip-dot go"></span>🆕 AI算力 · DeepSeek V4 · 今日建仓</div>
+  <div class="strip-item"><span class="strip-dot danger"></span>🆕 消费电子 · 内存危机重压 · 回避</div>
+  <div class="strip-item"><span class="strip-dot go"></span>🆕 军工 · 预算+7% · 台海溢价 · 建仓</div>
+  <div class="strip-item"><span class="strip-dot neutral"></span>🆕 人形机器人 · 叙事强估值高 · 轻仓</div>
+  <div class="strip-item"><span class="strip-dot neutral"></span>🆕 信创/工业软件 · 政策驱动 · 轻仓</div>
+</div>
+
+<!-- 原有板块 -->
+<div class="section-divider">// 原有板块分析 · 数据更新至2026年4月28日</div>
+
+<div class="main">
+
+  <!-- CPO光模块 -->
+  <div class="card danger">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">📡 CPO光模块</div>
+        <div class="status-badge badge-danger">当前：估值过高 · 坚持观望</div>
+      </div>
+      <div class="card-icon">⚠</div>
+    </div>
+    <div class="section-label">今日更新</div>
+    <div class="card-text">DeepSeek V4发布后AI算力链情绪升温，SMIC港股+10%，但二线CPO厂商（华工科技、昂纳）PE仍在70-78倍。1.6T产品大规模量产预计2026下半年，当前多为"预期溢价"。今日FOMC是最大短期变量——若鲍威尔偏鹰，科技股估值整体承压。</div>
+    <div class="force-row">
+      <span class="force-tag bear">主力 · 轮动尾声</span>
+      <span class="force-tag bear">游资 · 高位震荡收割</span>
+      <span class="force-tag neutral">外资 · AI算力叙事仍在 但非CPO主线</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">入手条件（同时满足）</div>
+      <ul>
+        <li>板块整体回调30%+（PE回归45倍以下）</li>
+        <li>1.6T产品量产获海外客户订单确认</li>
+        <li>美国AI算力资本开支无缩减信号</li>
+      </ul>
+    </div>
+    <div class="condition-block time">
+      <div class="label">时间节点</div>
+      <ul>
+        <li>观望至 2026年Q3（量产进展验证期）</li>
+        <li>最优买点：2026年8-9月财报季前后</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-high">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:82%"></div></div>
+      <span class="risk-val">82%</span>
+    </div>
+  </div>
+
+  <!-- 黄金 -->
+  <div class="card caution">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🥇 黄金（ETF / 纸金）</div>
+        <div class="status-badge badge-caution">今日：$4,689 · FOMC前震荡 · 今日建仓20%</div>
+      </div>
+      <div class="card-icon">◈</div>
+    </div>
+    <div class="section-label">今日实时情报（4月28日）</div>
+    <div class="card-text">今日金价$4,689/盎司，较上周高点回落约2.5%，破四连涨。核心变量：①霍尔木兹封锁第9周，美伊和谈再度受阻（特朗普取消伊斯兰堡会谈，伊朗通过巴方提交新提案）；②FOMC北京时间明日凌晨公布决议，维持3.50-3.75%概率99.5%，重点看鲍威尔措辞鹰鸽；③4月30日Q1 GDP+PCE是最大拐点风险。当前$4,689是合理建仓位，今日建20%底仓。</div>
+    <div class="force-row">
+      <span class="force-tag bull">全球央行 · 中国/印度/马来西亚持续购金</span>
+      <span class="force-tag bear">FOMC观望 · 高通胀可能延迟降息</span>
+      <span class="force-tag neutral">地缘博弈 · 霍尔木兹未解决 多空均衡</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">今日建仓逻辑</div>
+      <ul>
+        <li>【今日建20%底仓】$4,689为近期回调后合理入场位</li>
+        <li>FOMC维持利率（概率极高） → 短期金价反弹$4,750+</li>
+        <li>美伊谈判持续僵局 → 能源通胀预期维持金价中枢</li>
+        <li>FOMC鹰派（极小概率）→ 回踩$4,600，可加仓</li>
+      </ul>
+    </div>
+    <div class="condition-block sell">
+      <div class="label">出手/减仓信号</div>
+      <ul>
+        <li>美伊达成正式停火，霍尔木兹重开 → 单周可能跌5%+，立即减仓</li>
+        <li>金价突破$5,000后放量滞涨（MACD顶背离）</li>
+        <li>FOMC意外鹰派且美元指数突破106</li>
+      </ul>
+    </div>
+    <div class="condition-block time">
+      <div class="label">本周关键节点</div>
+      <ul>
+        <li>今日：建20%底仓，等待FOMC</li>
+        <li>明日凌晨：FOMC决议 — 维持/鸽派=反弹加仓；鹰派=观望</li>
+        <li>4月30日：Q1 GDP+PCE — 若强于预期，金价短期承压</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:40%"></div></div>
+      <span class="risk-val">40%</span>
+    </div>
+  </div>
+
+  <!-- 氮肥/农业 -->
+  <div class="card go">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🌾 氮肥/粮食安全</div>
+        <div class="status-badge badge-go">当前：买点已至 · 今日建仓10%</div>
+      </div>
+      <div class="card-icon">▲</div>
+    </div>
+    <div class="section-label">今日更新</div>
+    <div class="card-text">霍尔木兹封锁进入第9周，伊朗尿素出口受阻，全球氮肥供应紧张未变。IEA称本轮能源供应冲击为历史最大规模，粮食安全叙事强化。中国国内氮肥生产商（云天化、湖北宜化）受益于出口价差扩大，Q1利润数据较去年同期已明显改善。旺季效应（4-6月）叠加供给端危机，当前是周期性最优买点窗口。</div>
+    <div class="force-row">
+      <span class="force-tag bull">外资 · 粮食安全主题持续关注</span>
+      <span class="force-tag bull">主力 · 低估值+高股息吸引配置</span>
+      <span class="force-tag neutral">游资 · 霍尔木兹消息面博弈</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">今日建仓逻辑（10%仓位）</div>
+      <ul>
+        <li>云天化(600096) / 湖北宜化(000422)：Q1利润好转，估值低位</li>
+        <li>农业ETF(159825)：分散方案，参与整体粮食安全板块</li>
+        <li>旺季（春耕）叠加供给危机，是全年最佳入场窗口</li>
+      </ul>
+    </div>
+    <div class="condition-block sell">
+      <div class="label">出手/减仓条件</div>
+      <ul>
+        <li>霍尔木兹正式重开，伊朗化肥出口恢复</li>
+        <li>国际尿素价格较峰值回落30%+</li>
+        <li>7-8月旺季结束后减仓50%，等待下一季节窗口</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-low">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:28%"></div></div>
+      <span class="risk-val">28%</span>
+    </div>
+  </div>
+
+  <!-- 水电/电力 -->
+  <div class="card neutral">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">⚡ 水电/电力</div>
+        <div class="status-badge badge-neutral">当前：防御配置 · 等待5月夏汛</div>
+      </div>
+      <div class="card-icon">≈</div>
+    </div>
+    <div class="section-label">当前情况</div>
+    <div class="card-text">长江电力、华能水电作为高股息防御资产，在高波动环境中价值稳定。霍尔木兹能源危机间接提升清洁能源估值，但夏汛旺季（5月下旬-9月）才是业绩催化期。当前策略：不急于建仓，等5月中下旬夏汛启动后作为防御底仓买入。</div>
+    <div class="force-row">
+      <span class="force-tag bull">主力 · 高股息防御首选</span>
+      <span class="force-tag neutral">外资 · 避险配置优先级低于黄金</span>
+      <span class="force-tag bear">游资 · 无弹性 规避</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">建仓条件</div>
+      <ul>
+        <li>5月下旬夏汛启动后建5-8%防御底仓</li>
+        <li>长江电力(600900)股息率升至3.5%+时加仓</li>
+        <li>沪指大幅回调（跌破3,800）时作为避险仓位加仓</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-low">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:22%"></div></div>
+      <span class="risk-val">22%</span>
+    </div>
+  </div>
+
+  <!-- 恒生科技 -->
+  <div class="card watch">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🟠 恒生科技</div>
+        <div class="status-badge badge-watch">AI情绪回暖 · 小仓可参与</div>
+      </div>
+      <div class="card-icon">⬌</div>
+    </div>
+    <div class="section-label">今日更新</div>
+    <div class="card-text">上周五恒指收25,978（+0.24%），SMIC因DeepSeek V4单日+10%，AI科技股情绪回暖。南向资金（内资买港股）依然是港股最重要支撑力。但霍尔木兹带来的通胀压力使全球风险情绪仍受压，港股上方阻力明显。腾讯Q1财报（5月中旬）是最重要近期催化剂。</div>
+    <div class="force-row">
+      <span class="force-tag bull">南向资金 · 持续流入</span>
+      <span class="force-tag bull">AI叙事 · V4强化国产算力信心</span>
+      <span class="force-tag bear">霍尔木兹 · 全球风险情绪压制</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">参与方式（5-8%轻仓）</div>
+      <ul>
+        <li>恒生科技ETF(513130)：FOMC中性/鸽派后可小仓参与</li>
+        <li>腾讯Q1财报超预期后可加仓至10%</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:52%"></div></div>
+      <span class="risk-val">52%</span>
+    </div>
+  </div>
+
+  <!-- 半导体 -->
+  <div class="card watch">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🔬 半导体（国产设备/材料）</div>
+        <div class="status-badge badge-watch">V4短期利好 · 炒作溢价仍高 · 观望</div>
+      </div>
+      <div class="card-icon">⬌</div>
+    </div>
+    <div class="section-label">今日更新</div>
+    <div class="card-text">DeepSeek V4采用华为Ascend 950训练，SMIC港股+10%，"去Nvidia化"叙事强化。但需注意：①V4整体性能落后GPT-5.4约3-6个月，不构成"颠覆"；②当前半导体ETF(512480)相对高位，游资炒作溢价明显；③建议等V4热度消退后回调5-10%再入场，不今日追高。</div>
+    <div class="force-row">
+      <span class="force-tag bull">产业资本 · 自主芯片战略配置</span>
+      <span class="force-tag bull">DeepSeek V4 · SMIC/华为Ascend链受益</span>
+      <span class="force-tag bear">游资 · 短期炒作后警惕回调</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">入手条件</div>
+      <ul>
+        <li>半导体ETF回调5-10%后介入（今日不追高）</li>
+        <li>中微公司(688012)/北方华创(002371)回调至均线以下</li>
+        <li>Q3中芯国际5nm量产里程碑验证</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:58%"></div></div>
+      <span class="risk-val">58%</span>
+    </div>
+  </div>
+
+  <!-- 锂矿 -->
+  <div class="card go">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🔋 锂矿（锂电池材料）</div>
+        <div class="status-badge badge-go">当前：价格反弹周期 · 今日建仓8%</div>
+      </div>
+      <div class="card-icon">▲</div>
+    </div>
+    <div class="section-label">当前情况</div>
+    <div class="card-text">碳酸锂价格自年初低点反弹，全球储能装机需求（中国BESS出口）持续超预期。CATL华斯沃矿山复产进度是最大变量——复产公告即为退出信号。当前反弹趋势中，8%小仓跟踪，需保持纪律性止损意识。</div>
+    <div class="force-row">
+      <span class="force-tag bull">储能出口超预期 · 需求端支撑</span>
+      <span class="force-tag bear">CATL矿山复产 · 供给端最大风险</span>
+      <span class="force-tag neutral">游资 · 新能源叙事延伸</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">今日建仓逻辑（8%仓位）</div>
+      <ul>
+        <li>锂矿ETF(159604)：趋势跟踪为主，CATL复产前逻辑有效</li>
+        <li>全球储能半年数据（7月）是重要验证节点</li>
+      </ul>
+    </div>
+    <div class="condition-block sell">
+      <div class="label">硬性止损信号</div>
+      <ul>
+        <li>CATL华斯沃矿山正式复产公告（立即减仓）</li>
+        <li>碳酸锂价格破150,000元/吨后成交量萎缩</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:48%"></div></div>
+      <span class="risk-val">48%</span>
+    </div>
+  </div>
+
+  <!-- 医疗 -->
+  <div class="card neutral">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🏥 医疗（器械/创新药）</div>
+        <div class="status-badge badge-neutral">估值底部 · AI医疗可介入 · 今日建仓5%</div>
+      </div>
+      <div class="card-icon">≈</div>
+    </div>
+    <div class="section-label">当前情况</div>
+    <div class="card-text">A股医疗经历集采与反腐后，估值处历史低分位（整体PE约20倍）。AI+医疗是最具结构性机会的细分：迈瑞医疗大模型医疗应用持续商业化，联影医疗AI影像推进中。创新药出口化（百济神州海外临床超预期）是半年内最强逻辑。今日可建5%小仓AI医疗器械细分。</div>
+    <div class="force-row">
+      <span class="force-tag bull">海外机构 · AI医疗/创新药专项关注</span>
+      <span class="force-tag neutral">主力 · 防御性低仓位配置</span>
+      <span class="force-tag bear">游资 · 集采政策敏感 规避整体医药</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">今日建仓逻辑（5%仓位）</div>
+      <ul>
+        <li>医疗器械ETF(512170)：历史估值底部，低风险布局</li>
+        <li>迈瑞医疗/联影医疗：AI产品线商业化进展跟踪</li>
+      </ul>
+    </div>
+    <div class="condition-block sell">
+      <div class="label">减仓信号</div>
+      <ul>
+        <li>新一轮大规模集采落地（高值耗材/手术机器人）</li>
+        <li>创新药海外临床三期数据失败</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:42%"></div></div>
+      <span class="risk-val">42%</span>
+    </div>
+  </div>
+
+  <!-- 新能源 -->
+  <div class="card watch">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🌞 新能源（NEV · 光伏 · 储能）</div>
+        <div class="status-badge badge-watch">补贴退坡压制 · 等欧盟限价结果</div>
+      </div>
+      <div class="card-icon">⬌</div>
+    </div>
+    <div class="section-label">当前情况</div>
+    <div class="card-text">2026年NEV购置税从免征变为5%半减，EV增速降至13%，光伏组件价格持续低迷。储能出口仍是亮点，CATL引领全球BESS市场。整体观望，等待欧盟最低限价谈判结果（Q2末）才是真正入场窗口。</div>
+    <div class="force-row">
+      <span class="force-tag bear">主力 · 利润率压制 谨慎</span>
+      <span class="force-tag bull">储能出口 · 超预期亮点</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">入手条件</div>
+      <ul>
+        <li>欧盟最低限价协议落地（Q2末，NEV入场关键节点）</li>
+        <li>CATL海外工厂产能利用率超预期，股息率升3%+</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:57%"></div></div>
+      <span class="risk-val">57%</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- 新增板块 -->
+<div class="section-divider">// 新增板块分析 · AI · 消费电子 · 军工 · 半年潜力赛道</div>
+
+<div class="main">
+
+  <!-- 人工智能 (NEW) - WIDE -->
+  <div class="card new-sector wide">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🤖 人工智能（AI算力 · 大模型 · 应用）<span class="new-badge">NEW</span></div>
+        <div class="status-badge badge-new">DeepSeek V4发布 · 国产算力链利好 · 今日建仓15%</div>
+      </div>
+      <div class="card-icon">▲</div>
+    </div>
+    <div class="section-label">今日核心情报（4月28日）</div>
+    <div class="card-text">
+      DeepSeek于4月24日发布V4（V4-Pro + V4-Flash），三大关键突破：<br>
+      ①<strong>首次大规模采用华为Ascend 950芯片训练</strong>——"去Nvidia化"重要里程碑，SMIC港股单日+10%；<br>
+      ②<strong>定价断崖</strong>：V4-Pro $3.48/百万token，vs OpenAI $30 / Anthropic $25，中国AI成本优势进一步扩大；<br>
+      ③<strong>多极竞争格局</strong>：Kimi K2.5、Qwen 3.5、Seedance 2.0共同形成中国AI生态，企业级应用Token成本暴跌，AI从"奢侈品"转向"日用品"。<br>
+      注意：V4整体性能落后GPT-5.4约3-6个月，市场反应温和（"wow factor"已被部分消化）。十五五规划确立AI为数字经济核心驱动，R&D支出年增>7%，政策支撑明确。
+    </div>
+    <div class="force-row">
+      <span class="force-tag bull">产业资本 · 华为/SMIC/寒武纪战略配置</span>
+      <span class="force-tag bull">外资机构 · Janus Henderson等明确增配中国AI</span>
+      <span class="force-tag bull">南向资金 · AI主线是港股最强资金流向</span>
+      <span class="force-tag bear">游资 · DeepSeek概念炒作溢价已高</span>
+      <span class="force-tag neutral">散户 · 情绪偏多，高位追入需控制</span>
+    </div>
+    <div class="two-col">
+      <div class="condition-block buy">
+        <div class="label">今日建仓逻辑（15%仓位 · 分2批）</div>
+        <ul>
+          <li>【今日建8%】国证AI算力ETF(588088)：核心仓位，算力链首选</li>
+          <li>【FOMC后建7%】视鲍威尔措辞决定，鸽派则加仓至15%</li>
+          <li>寒武纪(688256)：V4利好Ascend生态，中期有逻辑</li>
+          <li>科大讯飞(002230)：AI落地应用最快的企业级场景</li>
+          <li>商汤科技(港股)：AI基础设施+应用双布局</li>
+        </ul>
+      </div>
+      <div class="condition-block sell">
+        <div class="label">减仓/止损信号</div>
+        <ul>
+          <li>美国对AI模型蒸馏发起具体制裁行动（白宫已发警告）</li>
+          <li>华为Ascend 950大规模量产受阻（供应链障碍）</li>
+          <li>AI算力ETF单日放量跌幅超3%且次日持续下跌</li>
+          <li>国内AI大模型竞争进入"价格战亏损期"，收入化受阻</li>
+          <li>DeepSeek V4正式版性能低于preview期望</li>
+        </ul>
+      </div>
+    </div>
+    <div class="condition-block time">
+      <div class="label">关键时间节点</div>
+      <ul>
+        <li>今日-明日：FOMC结果决定算力股短期方向；维持/鸽派=加仓至15%；鹰派=暂缓</li>
+        <li>Q2末：腾讯/阿里/百度Q1财报，AI营收占比是最重要基本面验证指标</li>
+        <li>Q3：DeepSeek V4正式版发布（目前为preview），性能全面验证期</li>
+        <li>年底：华为Ascend 950量产规模，决定"去Nvidia化"速度与中国AI算力天花板</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-mid">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:45%"></div></div>
+      <span class="risk-val">45%</span>
+    </div>
+  </div>
+
+  <!-- 消费电子 (NEW) -->
+  <div class="card danger">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">📱 消费电子（手机 · 面板 · 零部件）<span class="new-badge">NEW</span></div>
+        <div class="status-badge badge-danger">内存危机重压 · 整体回避 · 等待Q3拐点</div>
+      </div>
+      <div class="card-icon">⚠</div>
+    </div>
+    <div class="section-label">核心情报</div>
+    <div class="card-text">2026年全球智能手机出货量预计同比下降12.9%，中国Q1同比下降4%。根源：内存价格Q2上涨40-50%，小米削减2026年出货目标20%+，OPPO/vivo/传音同步下调。市场极度两极化：华为（国内供应链优势）+ Apple逆势增长，小米/OPPO深陷成本通胀与价格战双重挤压。面板（京东方）受拖累。AI手机（Edge AI）是唯一确定性亮点，但难以短期对冲成本冲击。</div>
+    <div class="force-row">
+      <span class="force-tag bear">主力 · 内存危机信号明确 降配</span>
+      <span class="force-tag bear">外资机构 · IDC全行业下调预期</span>
+      <span class="force-tag neutral">游资 · 华为新机/AI手机事件性炒作</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">谨慎细分机会（不建议今日介入）</div>
+      <ul>
+        <li>【华为供应链】长盈精密/领益智造：Q3华为备货启动后小仓参与</li>
+        <li>【AI手机】韦尔股份(688122)：图像传感器+AI手机双逻辑，回调后关注</li>
+        <li>整体消费电子ETF：等内存价格拐点明确后（Q3末）再入场</li>
+      </ul>
+    </div>
+    <div class="condition-block time">
+      <div class="label">时间节点</div>
+      <ul>
+        <li>Q3：华为下半年旗舰备货启动，华为供应链个股关注窗口</li>
+        <li>Q3末：全球内存价格是否见顶——整体板块反转信号</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-high">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:75%"></div></div>
+      <span class="risk-val">75%</span>
+    </div>
+  </div>
+
+  <!-- 军工 (NEW) - WIDE -->
+  <div class="card go wide">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🛡️ 军工（航天 · 海军 · 电子对抗）<span class="new-badge">NEW</span></div>
+        <div class="status-badge badge-go">国防预算+7% · 台海溢价持续 · 今日建仓12%</div>
+      </div>
+      <div class="card-icon">▲</div>
+    </div>
+    <div class="section-label">核心情报</div>
+    <div class="card-text">
+      2026年中国国防预算1.91万亿元（+7%，约$277B），实际支出据五角大楼估计可能高出32-63%。<br>
+      关键催化剂：①福建号航母2025年11月正式服役，舰载机/配套设备订单链条启动；②解放军台海军事演练2025年达5,709架次历史新高；③台湾总统赖清德宣布将国防支出提升至GDP的3.3%并推进"T-Dome"防空系统，直接刺激解放军对应性军备升级。<br>
+      军工板块具有<strong>政策强支撑（预算刚性）+ 地缘风险溢价（台海持续）</strong>的双重逻辑，是当前市场少有的"政策+需求"共振品种，确定性在今日所有板块中最高。
+    </div>
+    <div class="force-row">
+      <span class="force-tag bull">产业资本 · 国防预算+7%，订单确定性强</span>
+      <span class="force-tag bull">主力 · 政策背书，稳定配置仓位</span>
+      <span class="force-tag bull">全球地缘 · 台海风险+中东局势双重溢价</span>
+      <span class="force-tag neutral">外资 · 政策限制无法直接参与A股军工，侧面支撑情绪</span>
+    </div>
+    <div class="two-col">
+      <div class="condition-block buy">
+        <div class="label">今日建仓逻辑（12%仓位 · 今日建满）</div>
+        <ul>
+          <li>【ETF首选】军工ETF(512660)：分散个股风险，参与板块Beta</li>
+          <li>【航空发动机】航发动力(600893)：国产发动机短板突破，技术逻辑清晰</li>
+          <li>【海军装备】中船防务(600685)/中国动力(600482)：福建号服役带动后续订单</li>
+          <li>【电子对抗/雷达】台海演练强度维持高位，电子战装备受益</li>
+          <li>建议今日建满12%，军工是本次配置中确定性最高的板块</li>
+        </ul>
+      </div>
+      <div class="condition-block sell">
+        <div class="label">减仓/止损信号</div>
+        <ul>
+          <li>中美正式启动台海问题谈判框架（地缘溢价大幅下降）</li>
+          <li>国防预算增幅下调至5%以下（政策收缩信号）</li>
+          <li>军工板块短期涨幅超30%后出现放量滞涨</li>
+          <li>解放军将领反腐调查扩大（军工采购暂停风险）</li>
+        </ul>
+      </div>
+    </div>
+    <div class="condition-block time">
+      <div class="label">关键时间节点</div>
+      <ul>
+        <li>NOW → Q2：持续持有，地缘风险溢价短期不会消散</li>
+        <li>Q3：半年度军工订单数据，验证装备采购节奏是否超预期</li>
+        <li>Q4：若台海演练进一步升级 → 加仓节点（板块性机会）；若明显降温 → 减仓30%</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-low">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:32%"></div></div>
+      <span class="risk-val">32%</span>
+    </div>
+  </div>
+
+  <!-- 人形机器人 (NEW) -->
+  <div class="card neutral">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🦾 人形机器人（具身智能）<span class="new-badge">半年潜力</span></div>
+        <div class="status-badge badge-neutral">叙事极强 · 估值过高 · 轻仓参与3-5%</div>
+      </div>
+      <div class="card-icon">≈</div>
+    </div>
+    <div class="section-label">为何看好这半年</div>
+    <div class="card-text">人形机器人是2026年资本市场最强叙事之一。DeepSeek系列AI模型为机器人提供低成本"大脑"，边际成本暴跌推动具身智能商业化；青岛机器人基地已有人形机器人学习零部件分拣（2026年1月）；特斯拉Optimus/优必选/傅利叶工厂试用场景持续推进。中国具有完整供应链优势（减速器/电机/传感器）。但当前PE普遍80-150倍，属于"叙事溢价"仓位，需严格控制仓位和止损纪律。</div>
+    <div class="force-row">
+      <span class="force-tag bull">游资 · 最强概念，活跃度极高</span>
+      <span class="force-tag bull">产业资本 · 减速器/电机龙头战略布局</span>
+      <span class="force-tag bear">外资机构 · 估值过高，尚未纳入主流配置</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">参与方式（3-5%叙事仓位）</div>
+      <ul>
+        <li>机器人ETF(562500)：板块Beta，分散风险</li>
+        <li>绿的谐波(688017)：谐波减速器核心龙头，技术壁垒清晰</li>
+        <li>鸣志电器(603728)：步进电机，估值相对合理</li>
+        <li>严格止损纪律：跌10%即止损，不恋战</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-high">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:65%"></div></div>
+      <span class="risk-val">65%</span>
+    </div>
+  </div>
+
+  <!-- 银行/红利 (NEW) -->
+  <div class="card neutral">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">🏦 银行/红利资产<span class="new-badge">防御潜力</span></div>
+        <div class="status-badge badge-neutral">高股息压舱石 · 现金替代思维</div>
+      </div>
+      <div class="card-icon">≈</div>
+    </div>
+    <div class="section-label">为何今年有价值</div>
+    <div class="card-text">A股国有大行（工行、建行、中行）股息率普遍5-7%，在美联储维持高利率的背景下，高股息资产具有"时间的朋友"属性。十五五规划继续扩大财政，国有大行政策支撑不变。若美联储转向降息，大行估值有明显提升空间。红利ETF(510880)是最简单参与方式，适合作为现金替代+防御底仓。</div>
+    <div class="force-row">
+      <span class="force-tag bull">主力 · 险资/养老金长期配置首选</span>
+      <span class="force-tag neutral">外资 · 低波动偏好，但汇率为干扰项</span>
+      <span class="force-tag bear">游资 · 无弹性，完全规避</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">参与方式（5%·现金替代）</div>
+      <ul>
+        <li>红利ETF(510880)：股息率约5.5%，一键配置</li>
+        <li>工商银行/建设银行：股息率6-7%，政策背书极强</li>
+        <li>美联储降息信号明确时：可加仓至10%（估值重估机会）</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-low">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:20%"></div></div>
+      <span class="risk-val">20%</span>
+    </div>
+  </div>
+
+  <!-- 信创/工业软件 (NEW) -->
+  <div class="card neutral">
+    <div class="card-header">
+      <div>
+        <div class="card-sector">💻 信创/工业软件<span class="new-badge">半年潜力</span></div>
+        <div class="status-badge badge-neutral">政策强驱动 · 不受周期影响 · 轻仓5%</div>
+      </div>
+      <div class="card-icon">≈</div>
+    </div>
+    <div class="section-label">为何看好这半年</div>
+    <div class="card-text">美中科技脱钩背景下，信息技术应用创新（信创）是政策强制性需求，政府+国企采购替换周期持续。工业软件（CAD/CAM/PLM）是制造业核心壁垒，中望软件等加速国产替代。十五五规划将数字经济定为核心驱动，AI+工业软件融合（AI辅助设计/制造）是半年内最有可能落地的应用场景之一。信创需求不依赖经济周期，政策驱动确定性强。</div>
+    <div class="force-row">
+      <span class="force-tag bull">政策驱动 · 国家安全需求不受周期影响</span>
+      <span class="force-tag bull">产业资本 · 工业软件国产替代战略投入</span>
+      <span class="force-tag neutral">游资 · 信创概念阶段性活跃</span>
+    </div>
+    <div class="condition-block buy" style="margin-top:0.8rem;">
+      <div class="label">参与逻辑（5%仓位）</div>
+      <ul>
+        <li>中望软件(688083)：CAD国产龙头，AI辅助设计布局</li>
+        <li>科大讯飞(002230)：AI+政务/教育信创落地最快</li>
+        <li>信创ETF(562030)：板块性配置，分散个股风险</li>
+        <li>触发加仓：重大政府采购信创订单公告（事件驱动）</li>
+      </ul>
+    </div>
+    <div class="risk-meter risk-low">
+      <span class="risk-label">当前风险</span>
+      <div class="risk-bar"><div class="risk-fill" style="width:35%"></div></div>
+      <span class="risk-val">35%</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Timeline -->
+<div class="timeline">
+  <div class="timeline-title">// 关键时间窗口 · Signal Calendar · 2026年4月28日更新</div>
+
+  <div class="timeline-row">
+    <div class="tl-period">TODAY 15:00前</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">黄金20%</span>
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">军工12%</span>
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">氮肥10%</span>
+      <span class="sector-tag" style="color:var(--accent-blue);border-color:var(--accent-blue)">AI算力8%</span>
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">锂矿8%</span>
+      <span class="sector-tag" style="color:var(--accent-blue);border-color:var(--accent-blue)">医疗5%</span>
+      <strong style="color:var(--accent-gold)">今日操作优先级：</strong>黄金ETF(518880)底仓→军工ETF(512660)满仓→氮肥/农业→AI算力ETF(588088)第一批8%→锂矿+医疗器械。<strong style="color:var(--accent-red)">现金留30%</strong>等待FOMC。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">明日凌晨 FOMC</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">黄金</span>
+      <span class="sector-tag" style="color:var(--accent-purple);border-color:var(--accent-purple)">AI算力</span>
+      FOMC决议：维持3.50-3.75%概率99.5%，<strong style="color:var(--accent-green)">鸽派措辞</strong> → 黄金反弹+AI算力加仓至15%（动用10%现金）；<strong style="color:var(--accent-red)">鹰派措辞</strong> → 现金保留，等待金价回踩$4,600再加仓；利率意外上调（极低概率）→ 黄金减仓至10%，大幅减持科技。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">4月30日</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">美国GDP</span>
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">PCE通胀</span>
+      美国Q1 GDP初值+PCE物价指数。GDP弱+通胀低 → 降息预期升温，黄金+AI均受益，可用剩余现金加仓；GDP强+通胀高 → 维持高利率更久，金价短期承压，收紧仓位。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">5月初 → 5月中</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">氮肥持有</span>
+      <span class="sector-tag" style="color:var(--accent-orange);border-color:var(--accent-orange)">美伊谈判</span>
+      <span class="sector-tag" style="color:var(--accent-blue);border-color:var(--accent-blue)">腾讯财报</span>
+      氮肥旺季持续持有；腾讯Q1财报（5月中旬）验证AI广告/游戏增长是否超预期→恒生科技加仓信号；美伊若实质性突破，黄金立即减仓50%；DeepSeek V4商业化落地进展持续跟踪。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">5月下旬 → 6月</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-blue);border-color:var(--accent-blue)">水电布局</span>
+      <span class="sector-tag" style="color:var(--accent-orange);border-color:var(--accent-orange)">半导体回调买点</span>
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">欧盟限价</span>
+      夏汛启动，布局水电5-8%；半导体等V4热度消退后回调介入；欧盟新能源最低限价谈判结果（是否入场NEV/储能关键窗口）；医疗创新药海外数据季报窗口。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">7月 → 8月</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">氮肥减仓</span>
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">储能半年报</span>
+      <span class="sector-tag" style="color:var(--accent-green);border-color:var(--accent-green)">军工订单</span>
+      <span class="sector-tag" style="color:var(--accent-purple);border-color:var(--accent-purple)">AI财报季</span>
+      氮肥旺季末减仓50%；储能出口半年度数据是新能源板块最重要验证指标；军工半年订单数据是否超预期；腾讯/阿里/百度H1财报，AI营收占比验证。
+    </div>
+  </div>
+
+  <div class="timeline-row">
+    <div class="tl-period">Q4 2026</div>
+    <div class="tl-content">
+      <span class="sector-tag" style="color:var(--accent-gold);border-color:var(--accent-gold)">全局重估</span>
+      <span class="sector-tag" style="color:var(--accent-red);border-color:var(--accent-red)">科技休战到期</span>
+      <span class="sector-tag" style="color:var(--accent-purple);border-color:var(--accent-purple)">机器人量产</span>
+      美中科技休战协议到期博弈期；华为Ascend 950量产规模决定AI算力链全年走势；人形机器人若有实质性量产进展将带来板块性机会；锂矿出口管制（11月）是重要扰动；水电减仓结束旺季配置。
+    </div>
+  </div>
+</div>
+
+<!-- Overall -->
+<div class="overall">
+  <div class="overall-title">// 总结 · 今日策略（4月28日 · 北京时间15:00前操作）</div>
+  <div class="overall-grid">
+    <div class="overall-col">
+      <h3>🌐 今日宏观背景</h3>
+      <p>
+        A股今日处于<span class="highlight">FOMC观望期+DeepSeek V4情绪提振</span>的交叉点。上海综指约4,086（上周收盘数据），工业利润Q1同比+15.5%，基本面支撑较强。<br><br>
+        国际金价$4,689（较上周高点-2.5%），霍尔木兹进入第9周僵局，IEA称本轮为<span class="highlight-red">历史最大规模能源供应冲击</span>。美伊和谈再度受阻，特朗普取消伊斯兰堡会谈。<br><br>
+        DeepSeek V4（运行于华为Ascend 950）本周发布，<span class="highlight">SMIC港股单日+10%</span>，国产AI算力叙事强化，但整体市场反应温和，"wow因子"已部分消化。<span class="highlight-red">FOMC是本周最大单一变量</span>。
+      </p>
+    </div>
+    <div class="overall-col">
+      <h3>⚔️ 三方势力研判（今日）</h3>
+      <p>
+        <span class="highlight">主力（机构/产业资本）：</span>重仓高股息（银行/水电）和AI产业链；军工板块因国防预算+7%吸引战略配置；消费电子因内存危机被明确降配。北向资金若今日流入，优先关注AI算力和军工。<br><br>
+        <span class="highlight-red">游资：</span>DeepSeek V4是最新炒作题材，国产算力（华为概念/SMIC）短线活跃极高——<span class="highlight-red">注意高位不追</span>。人形机器人叙事热度不减，军工受台海消息面博弈。<br><br>
+        <span class="highlight-blue">散户：</span>情绪受V4提振，倾向追涨AI概念；军工板块受地缘新闻关注度上升。警惕FOMC前市场波动放大，不宜过度重仓单一板块。
+      </p>
+    </div>
+    <div class="overall-col">
+      <h3>🎯 今日操作执行总表</h3>
+      <p>
+        <span class="highlight-green">【今日15:00前建仓·70%总仓位】</span><br>
+        黄金ETF(518880) <span class="highlight">20%</span><br>
+        军工ETF(512660) <span class="highlight">12%</span><br>
+        氮肥/农业 <span class="highlight">10%</span><br>
+        AI算力ETF(588088) <span class="highlight">8%（第一批）</span><br>
+        锂矿ETF(159604) <span class="highlight">8%</span><br>
+        医疗器械ETF(512170) <span class="highlight">5%</span>（+轻仓人形/信创/红利各3-5%可酌情）<br><br>
+        <span class="highlight">【现金留存30%】</span>FOMC结果出炉后再决定AI算力加仓至15%，或补充黄金/水电。<br><br>
+        <span class="highlight-red">【今日坚决不碰】</span>消费电子整体 · CPO光模块 · 白酒 · 商业航天 · 半导体（不追高）
+      </p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>
+    数据参考：Trading Economics · Fortune · FX Leaders · IDC · Counterpoint Research · Janus Henderson · Defense News · CNBC · Reuters<br>
+    分析视角：中国大陆境外信息源（香港/国际机构/海外研报）· 不参考大陆官方媒体 · 考虑主力/游资/外资三方情绪<br>
+    更新时间：2026年4月28日 · 操作窗口：北京时间15:00前
+  </p>
+  <div class="disclaimer">
+    ⚠ 本报告仅供参考，不构成任何投资建议。市场有风险，投资需谨慎。所有操作须结合个人风险承受能力，建议咨询持牌投资顾问。
+  </div>
+</footer>
+
+</body>
+</html>
